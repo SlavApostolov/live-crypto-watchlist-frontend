@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Watchlist</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>My Live Crypto Portfolio</h1>
+
+        <div>
+            <div class="add-coin-section"
+                style="margin-bottom: 30px; padding: 15px; background: #f4f4f4; border-radius: 8px;">
+                <h3>Add a New Coin</h3>
+                <input type="text" id="new-coin-input" placeholder="e.g. ethereum, dogecoin"
+                    style="padding: 8px; width: 200px;">
+                <button id="add-coin-btn" style="padding: 8px 15px; cursor: pointer;">Save Coin</button>
+                <p id="add-coin-message" style="font-weight: bold; margin-top: 10px;"></p>
+            </div>
+        </div>
+        <div id="portfolio-container">
+            <p>Loading your coins...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
