@@ -180,3 +180,11 @@ h1 {
     background: #0f172a;
     padding: 5px;
 }
+
+.clickable-card {
+    cursor: pointer;
+}
+
+.clickable-card:hover {
+    border-top: 4px solid #4ade80;
+}

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Watchlist</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,7 +23,10 @@
     </div>
 
     <div id="dashboard-screen" class="container hidden">
-        <h1>My Live Crypto Portfolio</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>My Live Crypto Portfolio</h1>
+            <button id="logout-btn" class="cancel-btn">Log Out</button>
+        </div>
 
         <div class="add-coin-section">
             <h3>Manage Portfolio</h3>
@@ -34,6 +38,16 @@
 
         <div id="portfolio-container">
             <p>Loading your coins...</p>
+        </div>
+    </div>
+
+    <div id="chart-modal" class="modal-overlay hidden">
+        <div class="modal-content" style="width: 700px; max-width: 90vw;">
+            <h3 id="chart-title" style="color: #38bdf8;">Loading Chart...</h3>
+            <canvas id="priceChart"></canvas>
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button id="close-chart-btn" class="cancel-btn">Close</button>
+            </div>
         </div>
     </div>
 

@@ -6,6 +6,7 @@ const dashboardScreen = document.getElementById('dashboard-screen');
 const usernameInput = document.getElementById('username-input');
 const loginBtn = document.getElementById('login-btn');
 const loginMessage = document.getElementById('login-message');
+const logoutBtn = document.getElementById('logout-btn');
 
 const addCoinBtn = document.getElementById('add-coin-btn');
 const newCoinInput = document.getElementById('new-coin-input');
@@ -67,6 +68,22 @@ loginBtn.addEventListener('click', async () => {
         loginMessage.textContent = error.message;
         loginMessage.style.color = "#ef4444";
     }
+});
+
+// --- Log Out Logic ---
+logoutBtn.addEventListener('click', () => {
+    // 1. Wipe the memory of who is logged in
+    currentUserId = null;
+    currentPortfolioList = [];
+
+    // 2. Clean up the UI so the next person gets a fresh screen
+    usernameInput.value = '';
+    loginMessage.textContent = '';
+    portfolioContainer.innerHTML = '<p>Loading your coins...</p>';
+
+    // 3. Swap the screens!
+    dashboardScreen.classList.add('hidden');
+    loginScreen.classList.remove('hidden');
 });
 
 addCoinBtn.addEventListener('click', async () => {
@@ -138,13 +155,15 @@ function displayPortfolio(data) {
     data.portfolio.forEach(coin => {
 
         const coinCard = document.createElement('div');
-        coinCard.className = 'coin-card';
+        coinCard.className = 'coin-card clickable-card';
 
         coinCard.innerHTML = `
             <img src="${coin.imageUrl}" alt="${coin.coinId} logo" class="coin-logo">
             <h3>${coin.coinId.toUpperCase()}</h3>
             <p class="price">$${coin.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</p>
         `;
+
+        coinCard.addEventListener('click', () => openChart(coin.coinId));
 
         portfolioContainer.appendChild(coinCard);
     });
@@ -192,3 +211,70 @@ confirmDeleteBtn.addEventListener('click', async () => {
         deleteMessage.style.color = '#ef4444';
     }
 });
+
+
+// --- 4. Chart Logic ---
+const chartModal = document.getElementById('chart-modal');
+const closeChartBtn = document.getElementById('close-chart-btn');
+const chartTitle = document.getElementById('chart-title');
+let currentChart = null; // Memory to hold our graph so we can destroy it when closing
+
+closeChartBtn.addEventListener('click', () => {
+    chartModal.classList.add('hidden');
+});
+
+async function openChart(coinId) {
+    chartModal.classList.remove('hidden');
+    chartTitle.textContent = `${coinId.toUpperCase()} - 7 Day Trend`;
+
+    try {
+        const response = await fetch(`${BASE_URL}/coins/${coinId}/history`);
+        if (!response.ok) throw new Error("Failed to load chart");
+        const data = await response.json();
+
+        // Separate the timestamps (X-axis) and prices (Y-axis)
+        const labels = data.map(point => {
+            const date = new Date(point[0]); // Convert Unix timestamp to real date
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        });
+        const prices = data.map(point => point[1]);
+
+        //Destroy the old chart if it exists (so they don't overlap)
+        if (currentChart) {
+            currentChart.destroy();
+        }
+
+        // 3. Draw the new Neon Graph!
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        currentChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Price (USD)',
+                    data: prices,
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+    } catch (error) {
+        chartTitle.textContent = `Error loading data for ${coinId}`;
+        chartTitle.style.color = '#ef4444';
+    }
+}
