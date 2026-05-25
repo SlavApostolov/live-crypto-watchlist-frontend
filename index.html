@@ -9,22 +9,44 @@
 </head>
 
 <body>
+    <div id="login-screen" class="container">
+        <h1 style="margin-top: 100px;">Welcome to Crypto Watchlist</h1>
+        <div class="add-coin-section" style="text-align: center; max-width: 400px; margin: 0 auto;">
+            <h3>Enter your Username</h3>
+            <input type="text" id="username-input" placeholder="e.g. CryptoKing"
+                style="width: 100%; margin-bottom: 20px;">
+            <button id="login-btn" class="danger-btn"
+                style="background: #38bdf8; color: #0f172a; width: 100%; margin: 0;">Login / Create Account</button>
+            <p id="login-message" style="font-weight: bold; margin-top: 15px;"></p>
+        </div>
+    </div>
 
-    <div class="container">
+    <div id="dashboard-screen" class="container hidden">
         <h1>My Live Crypto Portfolio</h1>
 
-        <div>
-            <div class="add-coin-section"
-                style="margin-bottom: 30px; padding: 15px; background: #f4f4f4; border-radius: 8px;">
-                <h3>Add a New Coin</h3>
-                <input type="text" id="new-coin-input" placeholder="e.g. ethereum, dogecoin"
-                    style="padding: 8px; width: 200px;">
-                <button id="add-coin-btn" style="padding: 8px 15px; cursor: pointer;">Save Coin</button>
-                <p id="add-coin-message" style="font-weight: bold; margin-top: 10px;"></p>
-            </div>
+        <div class="add-coin-section">
+            <h3>Manage Portfolio</h3>
+            <input type="text" id="new-coin-input" placeholder="e.g. ethereum, dogecoin">
+            <button id="add-coin-btn">Save Coin</button>
+            <button id="open-delete-modal-btn" class="danger-btn">Remove a Coin</button>
+            <p id="add-coin-message" style="font-weight: bold; margin-top: 10px;"></p>
         </div>
+
         <div id="portfolio-container">
             <p>Loading your coins...</p>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>Select a Coin to Remove</h3>
+            <select id="delete-coin-select">
+            </select>
+            <div class="modal-actions">
+                <button id="confirm-delete-btn" class="danger-btn">Delete</button>
+                <button id="cancel-delete-btn" class="cancel-btn">Cancel</button>
+            </div>
+            <p id="delete-message" style="font-weight: bold; margin-top: 10px;"></p>
         </div>
     </div>
 
