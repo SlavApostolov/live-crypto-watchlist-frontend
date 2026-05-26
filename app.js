@@ -1,6 +1,9 @@
 const BASE_URL = 'https://localhost:7036/api/Watchlist';
 let currentUserId = null;
 
+const netWorthDisplay = document.getElementById('net-worth-display');
+const newAmountInput = document.getElementById('new-amount-input');
+
 const loginScreen = document.getElementById('login-screen');
 const dashboardScreen = document.getElementById('dashboard-screen');
 const usernameInput = document.getElementById('username-input');
@@ -107,7 +110,9 @@ addCoinBtn.addEventListener('click', async () => {
             },
             body: JSON.stringify({
                 UserId: currentUserId,
-                CoinId: coinName
+                CoinId: coinName,
+                Amount: parseFloat(newAmountInput.value) || 0
+
             })
         });
 
@@ -147,6 +152,7 @@ async function loadPortfolio() {
 
 function displayPortfolio(data) {
     portfolioContainer.innerHTML = '';
+    let totalNetWorth = 0;
 
     const header = document.createElement('h2');
     header.textContent = `Welcome back, ${data.username}!`;
@@ -154,19 +160,25 @@ function displayPortfolio(data) {
 
     data.portfolio.forEach(coin => {
 
+        const totalCoinValue = coin.amount * coin.currentPrice;
+        totalNetWorth += totalCoinValue;
+
         const coinCard = document.createElement('div');
         coinCard.className = 'coin-card clickable-card';
 
         coinCard.innerHTML = `
             <img src="${coin.imageUrl}" alt="${coin.coinId} logo" class="coin-logo">
             <h3>${coin.coinId.toUpperCase()}</h3>
-            <p class="price">$${coin.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</p>
+            <p style="color: #94a3b8; margin: 5px 0;">Live: $${coin.currentPrice.toLocaleString()}</p>
+            <p style="color: #38bdf8; margin: 5px 0;">Holdings: ${coin.amount} ${coin.coinId.toUpperCase()}</p>
+            <p class="price">Value: $${totalCoinValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
         `;
 
         coinCard.addEventListener('click', () => openChart(coin.coinId));
 
         portfolioContainer.appendChild(coinCard);
     });
+    netWorthDisplay.textContent = `Total Net Worth: $${totalNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 openModalBtn.addEventListener('click', () => {

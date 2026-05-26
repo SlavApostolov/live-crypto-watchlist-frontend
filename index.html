@@ -28,9 +28,20 @@
             <button id="logout-btn" class="cancel-btn">Log Out</button>
         </div>
 
+        <h2 style="text-align: center; font-size: 36px; color: #4ade80; margin-bottom: 40px;" id="net-worth-display">
+            Total Net Worth: $0.00
+        </h2>
+
         <div class="add-coin-section">
             <h3>Manage Portfolio</h3>
-            <input type="text" id="new-coin-input" placeholder="e.g. ethereum, dogecoin">
+
+            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+                <input type="text" id="new-coin-input" placeholder="e.g. bitcoin">
+                <input type="number" id="new-amount-input" placeholder="Amount (e.g. 0.5)" step="0.01"
+                    style="width: 150px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 6px; padding: 10px;">
+            </div>
+
+            <!-- <input type="text" id="new-coin-input" placeholder="e.g. ethereum, dogecoin"> -->
             <button id="add-coin-btn">Save Coin</button>
             <button id="open-delete-modal-btn" class="danger-btn">Remove a Coin</button>
             <p id="add-coin-message" style="font-weight: bold; margin-top: 10px;"></p>
