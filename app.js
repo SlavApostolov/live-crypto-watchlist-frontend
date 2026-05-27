@@ -1,4 +1,4 @@
-const BASE_URL = 'https://localhost:7036/api/Watchlist';
+const BASE_URL = 'https://crypto-backend-l7a5.onrender.com';
 let currentUserId = null;
 
 const passwordInput = document.getElementById('password-input');
