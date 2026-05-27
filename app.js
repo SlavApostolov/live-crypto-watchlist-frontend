@@ -1,6 +1,9 @@
 const BASE_URL = 'https://localhost:7036/api/Watchlist';
 let currentUserId = null;
 
+const passwordInput = document.getElementById('password-input');
+const signupBtn = document.getElementById('signup-btn');
+
 const netWorthDisplay = document.getElementById('net-worth-display');
 const newAmountInput = document.getElementById('new-amount-input');
 
@@ -29,46 +32,83 @@ const POST_URL = 'https://localhost:7036/api/Watchlist/coins';
 
 let currentPortfolioList = [];
 
-// --- Login Logic ---
-loginBtn.addEventListener('click', async () => {
+signupBtn.addEventListener('click', async () => {
     const username = usernameInput.value.trim();
-    if (!username) {
-        loginMessage.textContent = "Please enter a username.";
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+        loginMessage.textContent = "Please enter both a username and password.";
         loginMessage.style.color = "#ef4444";
         return;
     }
 
     try {
-        loginMessage.textContent = "Logging in...";
-        loginMessage.style.color = "#38bdf8";
+        loginMessage.textContent = "Creating account...";
+        loginMessage.style.color = "#4ade80";
 
-        // Fetch all users to check if this person exists
-        const response = await fetch(`${BASE_URL}/users`);
-        const users = await response.json();
+        const response = await fetch(`${BASE_URL}/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Username: username, Password: password })
+        });
 
-        let existingUser = users.find(u => u.username.toLowerCase() === username.toLowerCase());
-
-        if (existingUser) {
-            currentUserId = existingUser.userId;
-        } else {
-            loginMessage.textContent = "Creating new account...";
-            const createResponse = await fetch(`${BASE_URL}/users`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ Username: username })
-            });
-            if (!createResponse.ok) throw new Error("Failed to create account.");
-            const newUser = await createResponse.json();
-            currentUserId = newUser.userId;
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText);
         }
 
-        // Hide Login, Show Dashboard, Load their specific data!
+        const newUser = await response.json();
+        currentUserId = newUser.userId;
+
+        // Clear inputs and swap screens
+        passwordInput.value = '';
         loginScreen.classList.add('hidden');
         dashboardScreen.classList.remove('hidden');
         loadPortfolio();
 
     } catch (error) {
         loginMessage.textContent = error.message;
+        loginMessage.style.color = "#ef4444";
+    }
+});
+
+// --- Login Logic ---
+loginBtn.addEventListener('click', async () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+        loginMessage.textContent = "Please enter both a username and password.";
+        loginMessage.style.color = "#ef4444";
+        return;
+    }
+
+    try {
+        loginMessage.textContent = "Verifying credentials...";
+        loginMessage.style.color = "#38bdf8";
+
+        const response = await fetch(`${BASE_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Username: username, Password: password })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText); // Catches the "Unauthorized" message
+        }
+
+        const user = await response.json();
+        currentUserId = user.userId;
+
+        // Clear inputs and swap screens
+        passwordInput.value = '';
+        loginScreen.classList.add('hidden');
+        dashboardScreen.classList.remove('hidden');
+        loadPortfolio();
+
+    } catch (error) {
+        loginMessage.textContent = "Invalid username or password.";
         loginMessage.style.color = "#ef4444";
     }
 });
@@ -81,6 +121,7 @@ logoutBtn.addEventListener('click', () => {
 
     // 2. Clean up the UI so the next person gets a fresh screen
     usernameInput.value = '';
+    passwordInput.value = '';
     loginMessage.textContent = '';
     portfolioContainer.innerHTML = '<p>Loading your coins...</p>';
 
@@ -238,11 +279,23 @@ closeChartBtn.addEventListener('click', () => {
 async function openChart(coinId) {
     chartModal.classList.remove('hidden');
     chartTitle.textContent = `${coinId.toUpperCase()} - 7 Day Trend`;
+    chartTitle.style.color = '#38bdf8';
 
     try {
         const response = await fetch(`${BASE_URL}/coins/${coinId}/history`);
         if (!response.ok) throw new Error("Failed to load chart");
         const data = await response.json();
+
+        if (data.length === 0) {
+            chartTitle.textContent = "API Rate Limit Hit! Please wait 60 seconds.";
+            chartTitle.style.color = '#ef4444';
+
+            // Wipe the blank chart off the screen
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            return;
+        }
 
         // Separate the timestamps (X-axis) and prices (Y-axis)
         const labels = data.map(point => {
