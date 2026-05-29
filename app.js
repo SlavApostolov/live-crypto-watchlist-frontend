@@ -26,7 +26,8 @@ const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
 const deleteSelect = document.getElementById('delete-coin-select');
 const deleteMessage = document.getElementById('delete-message');
 
-const POST_URL = 'https://localhost:7036/api/Watchlist/coins';
+//const POST_URL = 'https://localhost:7036/api/Watchlist/coins'; //Before
+const BASE_URL = 'https://crypto-backend-l7a5.onrender.com/api/watchlist'; //After
 //const GET_URL = `https://localhost:7036/api/Watchlist/${currentUserId}/portfolio`;
 //const DELETE_BASE_URL = `https://localhost:7036/api/Watchlist/${currentUserId}/coins/`;
 
@@ -144,7 +145,7 @@ addCoinBtn.addEventListener('click', async () => {
         addMessage.textContent = 'Saving to database...';
         addMessage.style.color = 'blue';
 
-        const response = await fetch(POST_URL, {
+        const response = await fetch(BASE_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
