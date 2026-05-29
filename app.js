@@ -145,7 +145,7 @@ addCoinBtn.addEventListener('click', async () => {
         addMessage.textContent = 'Saving to database...';
         addMessage.style.color = 'blue';
 
-        const response = await fetch(BASE_URL, {
+        const response = await fetch(`${BASE_URL}/coins`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
