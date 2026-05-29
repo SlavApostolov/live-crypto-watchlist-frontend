@@ -27,7 +27,7 @@ const deleteSelect = document.getElementById('delete-coin-select');
 const deleteMessage = document.getElementById('delete-message');
 
 //const POST_URL = 'https://localhost:7036/api/Watchlist/coins'; //Before
-const BASE_URL = 'https://crypto-backend-l7a5.onrender.com/api/watchlist'; //After
+//const BASE_URL = 'https://crypto-backend-l7a5.onrender.com/api/watchlist'; //After
 //const GET_URL = `https://localhost:7036/api/Watchlist/${currentUserId}/portfolio`;
 //const DELETE_BASE_URL = `https://localhost:7036/api/Watchlist/${currentUserId}/coins/`;
 
