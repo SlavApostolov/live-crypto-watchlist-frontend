@@ -191,7 +191,6 @@ h1 {
 
 /* --- Cleaned Up Inline Styles --- */
 
-/* Login Screen Styles */
 .login-title {
     margin-top: 100px;
 }
@@ -206,7 +205,6 @@ h1 {
     width: 100%;
     margin-bottom: 10px;
     box-sizing: border-box;
-    /* Ensures padding doesn't stretch the input */
 }
 
 .mb-20 {
@@ -233,7 +231,7 @@ h1 {
     background: #4ade80;
 }
 
-/* Status Messages (Used for login, add coin, and delete) */
+/* Status Message Styles */
 .status-message {
     font-weight: bold;
     margin-top: 15px;
