@@ -188,3 +188,97 @@ h1 {
 .clickable-card:hover {
     border-top: 4px solid #4ade80;
 }
+
+/* --- Cleaned Up Inline Styles --- */
+
+/* Login Screen Styles */
+.login-title {
+    margin-top: 100px;
+}
+
+.login-box {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.full-width-input {
+    width: 100%;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    /* Ensures padding doesn't stretch the input */
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.auth-btn {
+    width: 100%;
+    color: #0f172a;
+    margin: 0;
+}
+
+.login-color {
+    background: #38bdf8;
+}
+
+.signup-color {
+    background: #4ade80;
+}
+
+/* Status Messages (Used for login, add coin, and delete) */
+.status-message {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* Dashboard Styles */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.net-worth-title {
+    text-align: center;
+    font-size: 36px;
+    color: #4ade80;
+    margin-bottom: 40px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.amount-input {
+    width: 150px;
+    background: #0f172a;
+    color: white;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+/* Chart Modal Styles */
+.chart-modal-content {
+    width: 700px;
+    max-width: 90vw;
+}
+
+.chart-title {
+    color: #38bdf8;
+}
+
+.chart-actions {
+    margin-top: 20px;
+}
